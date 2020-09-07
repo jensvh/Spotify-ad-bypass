@@ -1,0 +1,51 @@
+{
+	"manifest_version": 2,
+	"name": "Spotify-ad-bypass",
+	"version": "0.1",
+	"description": "Bypass spotify adds",
+	
+	"background": {
+		"persistent": true,
+		"scripts": [
+			"background.js"
+		]
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"https://open.spotify.com/*"
+			],
+			"run_at": "document_start",
+			"js": [
+				"spotify-injection.js"
+			]
+		}
+	],
+	"page_action": {
+		"default_popup": "options.html",
+		"default_title": "Ad bypass options",
+		"default_icon": {
+			"256": "icons/mute-256.png",
+			"128": "icons/mute-128.png",
+			"64": "icons/mute-64.png",
+			"48": "icons/mute-48.png",
+			"32": "icons/mute-32.png",
+			"16": "icons/mute-16.png"
+		}
+	},
+	"permissions": [
+		"https://*.spotify.com/*",
+		"wss://*.spotify.com/*",
+		"tabs",
+		"webRequest",
+		"storage"
+	],
+	"icons": {
+		"256": "icons/mute-256.png",
+		"128": "icons/mute-128.png",
+		"64": "icons/mute-64.png",
+		"48": "icons/mute-48.png",
+		"32": "icons/mute-32.png",
+		"16": "icons/mute-16.png"
+	}
+}
