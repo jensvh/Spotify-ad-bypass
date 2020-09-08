@@ -36,7 +36,7 @@ async function play() {
 }
 
 // Retrieve "how many tracks, before a reload" from storage.
-chrome.storage.sync.get("tracks_before_reload", function(data) {
+chrome.storage.local.get("tracks_before_reload", function(data) {
 	reload_after_x_tracks = data.tracks_before_reload;
 });
 
