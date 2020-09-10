@@ -1,0 +1,43 @@
+{
+	"manifest_version": 2,
+	"name": "Spotify-ad-bypass",
+	"version": "0.1",
+	"description": "Bypass spotify ads undetectable.",
+	
+	"background": {
+		"persistent": true,
+		"scripts": [
+			"YtMusic.js",
+			"background.js",
+			"backup-functions.js",
+			"spotify-impl.js"
+		]
+	},
+	"content_scripts": [
+		{
+			"matches": [
+				"https://open.spotify.com/*"
+			],
+			"run_at": "document_start",
+			"js": [
+				"content-script.js"
+			]
+		}
+	],
+	"permissions": [
+		"https://*.spotify.com/*",
+		"wss://*.spotify.com/*",
+		"https://music.youtube.com/",
+		"tabs",
+		"webRequest",
+		"webRequestBlocking"
+	],
+	"icons": {
+		"256": "icons/mute-256.png",
+		"128": "icons/mute-128.png",
+		"64": "icons/mute-64.png",
+		"48": "icons/mute-48.png",
+		"32": "icons/mute-32.png",
+		"16": "icons/mute-16.png"
+	}
+}
