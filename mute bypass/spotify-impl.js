@@ -14,7 +14,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 		if (details.method === "POST") {
 			// The data is already encoded in bytes, so we need to decode it again
 			var json = JSON.parse(decodeURIComponent(String.fromCharCode.apply(null, new Uint8Array(details.requestBody.raw[0].bytes))));
-			console.log(json);
+
 			device_id = json.device.device_id;
 			connection_id = json.connection_id;
 			
@@ -41,3 +41,5 @@ async function getUserPlayback() {
 	).catch((error)=> {console.log("error");console.log(error);});
 	return response.json();
 }
+
+

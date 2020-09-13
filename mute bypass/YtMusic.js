@@ -74,4 +74,18 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
   return {requestHeaders: details.requestHeaders};
 }, {urls: [ '*://music.youtube.com/*' ]},['requestHeaders','blocking','extraHeaders']);
 
-// TODO: get audio from track id
+// Get download link for mp3
+function getDownloadUrl(id) {
+	return fetch('https://www.yt-download.org/api/button/mp3/' + id)
+		.then(response => response.text())
+		.then(text => {
+			const html = new DOMParser().parseFromString(text, 'text/html');
+			const download_link = html.documentElement.querySelector('div.download > a').href;
+			return download_link;
+		})
+		.catch(error => {
+			console.log(error);
+			return null;
+		});
+}
+
