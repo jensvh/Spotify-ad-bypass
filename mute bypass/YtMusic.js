@@ -48,7 +48,7 @@ function getTrack(musicShelfRendererContent) {
 	track.album = stripString(track_parent[2].musicResponsiveListItemFlexColumnRenderer.text.runs[0].text);
 	// Get duration
 	const duration = track_parent[3].musicResponsiveListItemFlexColumnRenderer.text.runs[0].text.split(':'); // Is in format mm:ss, so split at ':'
-	track.duration = parseInt(duration[0]) * 60 + parseInt(duration[1]); // You might wanna check if the time is in hours (=> hh:mm:ss)
+	track.duration = (parseInt(duration[0]) * 60 + parseInt(duration[1])) * 1000; // You might wanna check if the time is in hours (=> hh:mm:ss), 
 	// Get track id
 	track.id = musicShelfRendererContent.musicResponsiveListItemRenderer.doubleTapCommand.watchEndpoint.videoId;
 	
@@ -89,3 +89,51 @@ function getDownloadUrl(id) {
 		});
 }
 
+// Find best match with spotify track
+async function getBestMatch(track) {
+	// Track info, make ready for comparison
+	const name = stripString(track.name);
+	const artist = stripString(track.artists[0].name);
+	const album = stripString(track.album.name);
+	const duration = parseInt(track.duration_ms); // in ms
+	
+	var json = await sendRequest(track.name + " " + track.artists[0].name, music_api_token);
+	var contents = getMusicShelfRendererContents(json);
+	
+	// For each track in contents
+	for (var i = 0; i < contents.length; i++) {
+		// Make the track a bit more readable
+		const track = getTrack(contents[i]);
+		// check matching criteria
+		if (name.includes(track.name) && (album.includes(track.album) || album.includes(track.name)) && Math.abs(duration - track.duration) <= 2000) {
+			// Check if artists match
+			for (var j = 0; j < track.artists.length; j++) {
+				if (artist.includes(track.artists[i])) {
+					console.log("Found a match: " + track.name);
+					return track.id;
+				}
+			}
+		}
+	}
+	
+	json = await sendRequest(track.name + " " + track.artists[0].name, video_api_token);
+	contents = getMusicShelfRendererContents(json);
+	
+	// For each track in contents
+	for (var i = 0; i < contents.length; i++) {
+		// Make the track a bit more readable
+		const track = getTrack(contents[i]);
+		// check matching criteria
+		if (name.includes(track.name) && (album.includes(track.album) || album.includes(track.name)) && Math.abs(duration - track.duration) <= 2000) {
+			// Check if artists match
+			for (var j = 0; j < track.artists.length; j++) {
+				if (artist.includes(track.artists[i])) {
+					console.log("found a match: " + track.name);
+					return track.id;
+				}
+			}
+		}
+	}
+	console.log("Could not find a suitable match");
+	return undefined;
+}

@@ -42,4 +42,37 @@ async function getUserPlayback() {
 	return response.json();
 }
 
+// Get index of ad in next_tracks array => how many tracks until an ad
+function getAdIndex(json) {
+	const next_tracks = json.player_state.next_tracks;
+	for (var i = 0; i < next_tracks.length; i++) {
+		if (isAd(next_tracks[i])) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+// ----------------------- utils -------------------------
+function isAd(track) {
+	return track.uri.startsWith('spotify:ad');
+}
+
+// Some messy way of getting a track and not an ad.
+function getTrackByIndex(context, index) {
+	const next_tracks = context.player_state.next_tracks;
+	const track = context.player_state.next_tracks[index];
+	if (isAd(track)) {
+		track = context.player_state.next_tracks[index+1];
+		if (isAd(track)) {
+			track = context.player_state.next_tracks[index-1];
+		}
+	}
+	return track;
+}
+
+async function getTrackObj(track) {
+	const id = track.uri.split(':')[2];
+	return requestSpotify('https://api.spotify.com/v1/tracks/' + id);
+}
 

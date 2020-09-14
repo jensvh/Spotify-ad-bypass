@@ -8,9 +8,10 @@
 		"persistent": true,
 		"scripts": [
 			"YtMusic.js",
-			"background.js",
 			"backup-functions.js",
-			"spotify-impl.js"
+			"spotify-impl.js",
+			"media.js",
+			"background.js"
 		]
 	},
 	"content_scripts": [

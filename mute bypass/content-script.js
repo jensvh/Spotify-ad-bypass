@@ -1,3 +1,38 @@
+// Ad bypass logic
+onSpotifyLoaded()
+		.then(track_name => {
+			observeTrackName(track_name);
+		});
+
+var wasAd = false;
+
+async function onAd() {
+	wasAd = true;
+	communicate('onAd');
+}
+
+async function onTrack() {
+	if (wasAd) {
+		console.log("was ad");
+		wasAd = false;
+		communicate('onAdFinished');
+		setTimeout(pause, 150);
+		return;
+	}
+	communicate('onTrack');
+}
+
+// Communication listener
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	if (request.action == 'onMediaElementFinished') {
+		console.log("onMediaElementFinished");
+		nextTrack();
+		play();
+	}
+});
+
+
+// ----------------- utils ---------------------
 // when spotify is fully loaded
 // Check every 250ms if "track name" element exists, when it exists, spotify is fully loaded
 async function onSpotifyLoaded() {
@@ -17,7 +52,6 @@ async function onSpotifyLoaded() {
 async function observeTrackName(track_name) {
 	new MutationObserver(function(mutations) {
 		mutations.forEach(function(mutation) {
-			console.log(mutation);
 			
 			// If is add
 			if (mutation.target.innerText === "" || mutation.target.innerText.includes("Advertisement")) {
@@ -32,36 +66,30 @@ async function observeTrackName(track_name) {
 	}).observe(track_name, { attributeFilter: ['aria-label']});
 }
 
-// Press the play/pause button
+// Press the pause button
 async function pause() {
-	var btn = document.querySelector('button[data-testid="control-button-play"]');
-	btn.click();
-}
-
-async function mute() {
-	await chrome.runtime.sendMessage({action: 'Mute'});
-}
-
-async function unmute() {
-	await chrome.runtime.sendMessage({action: 'Unmute'});
-}
-
-let wasAd = false;
-async function onAd() {
-	wasAd = true;
-	mute();
-}
-
-async function onTrack() {
-	if (wasAd) {
-		unmute();
-		wasAd = false;
-		pause();
+	console.log("pause");
+	var btn = document.querySelector('button[data-testid="control-button-pause"]');
+	if (btn !== null && btn !== undefined) {
+		console.log("click");
+		btn.click();
 	}
 }
 
-// Ad bypass logic
-onSpotifyLoaded()
-		.then(track_name => {
-			observeTrackName(track_name);
-		});
+// Press the play button
+async function play() {
+	var btn = document.querySelector('button[data-testid="control-button-play"]');
+	if (btn !== null && btn !== undefined) {
+		btn.click();
+	}
+}
+
+// Press the next button
+async function nextTrack() {
+	var btn = document.querySelector('button[data-testid="control-button-skip-forward"]');
+	btn.click();
+}
+
+async function communicate(action) {
+	await chrome.runtime.sendMessage({action: action});
+}
