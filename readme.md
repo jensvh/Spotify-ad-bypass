@@ -18,7 +18,7 @@ This extension mutes your tab when an ad starts, in the meantime it plays the ne
 - When the track has ended, skip the next track on spotify and press play
 
 ## Spotify API
-|Get users playback|<span style="font-weight:normal">Get a users queue including ads<\span>|
+|Get users playback|<span style="font-weight:normal">Get a users queue including ads</span>|
 |-|-|
 |Endpoint|`POST https://gew-spclient.spotify.com/connect-state/v1/devices/hobs_ + device_id[0:-5]`|
 |Headers|x-spotify-connection-id: `connection_id` <br> authorization: Bearer `bearer`|
