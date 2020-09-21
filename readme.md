@@ -24,9 +24,15 @@ This extension mutes your tab when an ad starts, in the meantime it plays the ne
 |Headers|x-spotify-connection-id: `connection_id` <br> authorization: Bearer `bearer`|
 |Body|`{"member_type":"CONNECT_STATE","device":{"device_info":{"capabilities":{"can_be_player":false,"hidden":true}}}}`|
 |`device_id[0:-5]`|The first 35 chars, a device_id has 40 chars|
-|`device_id`|Can be retrieved from the **devices** request|
-|`connection_id`|Can be retrieved from the **devices** request|
-|`bearer`|Can be retrieved from the **devices** request|
+|`device_id`|Can be retrieved from the **devices request**|
+|`connection_id`|Can be retrieved from the **devices request**|
+|`bearer`|Can be retrieved from the **devices request**|
+|**Response**|  |
+|`track`|The current track, contains uri and how and when it is added|
+|`prev_tracks`|The tracks you've listened or skipped|
+|`next_tracks`|The upcoming tracks, including ads|
+|Track object|<pre>{<br>  "uri": "spotify:track:track_id",<br>  "uid": "some_uuid",<br>  "metadata": {<br>    "added_at": "some_long_when_the_track_is_added",<br>    "added_by_username": "some_user_identifier",<br>    "context_uri": "spotify:playlist:playlist_id",<br>    "entity_uri": "spotify:playlist:playlist_id",<br>    "iteration": "0",<br>    "track_player": "audio"<br>  },<br>  "provider": "context"<br>}</pre>|
+|Ad object|<pre>{<br>  "uri": "spotify:ad:placeholder",<br>  "metadata": {<br>    "hidden": "true",<br>    "is_advertisement": "true",<br>    "keep_skip_direction": "true"<br>  },<br>  "provider": "ads/inject_tracks"<br>}</pre>|
 
 <br>
 
