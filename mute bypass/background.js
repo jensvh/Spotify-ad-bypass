@@ -32,13 +32,15 @@ async function onTrack() {
 	const context = await getUserPlayback();
 	const ad_index = getAdIndex(context);
 	console.log("Ad index: " + ad_index);
-	const track = getTrackByIndex(context, ad_index+1); // This does not return a track object, it just contains a song uri and some useless information
-	if (buffered_track !== track.uri) {
-		buffered_track = track.uri
-		const track_obj = await getTrackObj(track);
-		const yt_id = await getBestMatch(track_obj);
-		const url = await getDownloadUrl(yt_id);
-		changeTrack(url);
+	if (ad_index <= 1) {
+		const track = getTrackByIndex(context, ad_index+1); // This does not return a track object, it just contains a song uri and some useless information
+		if (buffered_track !== track.uri) {
+			buffered_track = track.uri
+			const track_obj = await getTrackObj(track);
+			const yt_id = await getBestMatch(track_obj);
+			const url = await getDownloadUrl(yt_id);
+			changeTrack(url);
+		}
 	}
 }
 

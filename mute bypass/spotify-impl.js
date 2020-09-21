@@ -61,13 +61,12 @@ function isAd(track) {
 // Some messy way of getting a track and not an ad.
 function getTrackByIndex(context, index) {
 	const next_tracks = context.player_state.next_tracks;
-	const track = context.player_state.next_tracks[index];
-	if (isAd(track)) {
-		track = context.player_state.next_tracks[index+1];
-		if (isAd(track)) {
-			track = context.player_state.next_tracks[index-1];
-		}
-	}
+	var track;
+	var i = 0;
+	do {
+		track = context.player_state.next_tracks[index + i];
+		i += 1;
+	} while (isAd(track));
 	return track;
 }
 

@@ -6,7 +6,7 @@ var mediaElement = undefined;
 function initMediaElement() {
 	mediaElement = document.createElement('audio');
 	mediaElement.type = 'audio/mpeg';
-	mediaElement.defaultPlaybackRate = 5.0;
+	mediaElement.defaultPlaybackRate = 1.0;
 	mediaElement.pause();
 	document.body.appendChild(mediaElement);
 }
